@@ -48,6 +48,23 @@ app.post('/user', async (req, res) => {
     const result = await userCollection.insertOne(user);
     res.send(result);
 })
+app.put('/user/:id',async(req,res)=>{
+    const id=req.params.id;
+    const updatedUser=req.body;
+    console.log(updatedUser)
+    const filter={_id: new ObjectId(id)};
+    const optional={upsert:true}
+    const user={
+      $set:{
+        name:updatedUser.name,
+        email:updatedUser.email,
+        phone:updatedUser.phone
+      }
+    }
+
+    const result=await userCollection.updateOne(filter,user,optional);
+    res.send(result)
+  })
 
 app.delete('/user/:id',async(req,res)=>{
     const id=req.params.id;
